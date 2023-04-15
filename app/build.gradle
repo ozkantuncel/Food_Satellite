@@ -34,6 +34,8 @@ android {
         viewBinding true
     }
 }
+apply plugin: "kotlin-kapt"
+apply plugin: "dagger.hilt.android.plugin"
 
 dependencies {
 
@@ -46,4 +48,23 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+
+    //Retrofit
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+
+    //OKHTTP3
+    implementation 'com.squareup.okhttp3:okhttp:4.10.0'
+
+    //Gson
+    implementation 'com.google.code.gson:gson:2.10.1'
+
+    //Dagger hilt
+    implementation "com.google.dagger:hilt-android:2.42"
+    kapt "com.google.dagger:hilt-android-compiler:2.42"
+
+    //Viewmodel
+    implementation "androidx.lifecycle:lifecycle-viewmodel:2.6.1"
+    implementation "androidx.activity:activity-ktx:1.7.0"
+
 }
