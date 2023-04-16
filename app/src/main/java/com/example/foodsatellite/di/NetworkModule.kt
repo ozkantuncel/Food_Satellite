@@ -1,6 +1,8 @@
 package com.example.foodsatellite.di
 
 import com.example.foodsatellite.data.remote.MenuApi
+import com.example.foodsatellite.data.repository.MenuRepositoryImpl
+import com.example.foodsatellite.domain.repository.MenuRepository
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import dagger.Module
@@ -40,4 +42,8 @@ object NetworkModule {
     @Provides
     @Singleton
     fun provideMenuService(retrofit: Retrofit): MenuApi = retrofit.create(MenuApi::class.java)
+
+    @Provides
+    @Singleton
+    fun provideMenuRepository(menuService: MenuApi): MenuRepository = MenuRepositoryImpl(menuService)
 }
