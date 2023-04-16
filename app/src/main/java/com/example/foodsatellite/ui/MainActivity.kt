@@ -1,4 +1,4 @@
-package com.example.foodsatellite
+package com.example.foodsatellite.ui
 
 import android.os.Bundle
 import com.google.android.material.snackbar.Snackbar
