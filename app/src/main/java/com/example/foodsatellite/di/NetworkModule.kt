@@ -3,6 +3,7 @@ package com.example.foodsatellite.di
 import com.example.foodsatellite.data.remote.MenuApi
 import com.example.foodsatellite.data.repository.MenuRepositoryImpl
 import com.example.foodsatellite.domain.repository.MenuRepository
+import com.example.foodsatellite.domain.util.BaseUrl
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import dagger.Module
@@ -19,7 +20,7 @@ import javax.inject.Singleton
 object NetworkModule {
 
     @Provides
-    fun provideBaseUrl() = "http://kasimadalan.pe.hu/yemekler/"
+    fun provideBaseUrl() = BaseUrl.BASE_URL
 
     @Provides
     @Singleton
