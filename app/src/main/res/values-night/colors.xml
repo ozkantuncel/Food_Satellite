@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FFFFFFFF</color>
+    <color name="white">#FF000000</color>
+    <color name="chipGray">#2B2B2B</color>
+    <color name="gray">#D6CFCF</color>
+    <color name="chipTextPress">#96BF66</color>
+    <color name="starColor">#A7AE00</color>
+    <color name="heartColorOn">#FF6B81</color>
+    <color name="heartColorOff">#BDC3C7</color>
+
+</resources>

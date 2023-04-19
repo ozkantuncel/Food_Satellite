@@ -30,7 +30,7 @@ interface MenuApi {
         @Field("kullanici_adi") username: String
     ): CartMealResponse
 
-    @POST("sepettenYemekSil")
+    @POST("sepettenYemekSil.php")
     @FormUrlEncoded
     suspend fun deleteCartItem(
         @Field("sepet_yemek_id") cartMealId:Int,
