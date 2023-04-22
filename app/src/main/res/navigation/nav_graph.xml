@@ -2,4 +2,25 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/nav_graph" />
+    android:id="@+id/nav_graph"
+    app:startDestination="@+id/homeFragment">
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.example.foodsatellite.ui.main_screen.MainFragment"
+        android:label="@string/main_bottom_m"
+        tools:layout="@layout/fragment_main" />
+
+    <fragment
+        android:id="@+id/cartFragment"
+        android:name="com.example.foodsatellite.ui.cart_screen.CartFragment"
+        android:label="@string/main_bottom_c"
+        tools:layout="@layout/fragment_cart" />
+
+    <fragment
+        android:id="@+id/favFragment"
+        android:name="com.example.foodsatellite.ui.fav_screen.FavoriteFragment"
+        android:label="@string/main_bottom_f"
+        tools:layout="@layout/fragment_favorite" />
+
+</navigation>
