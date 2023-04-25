@@ -39,6 +39,7 @@ class MainFragmentViewModel @Inject constructor(private val menuRepository: Menu
             _meals.value = Resource.Loading
             try {
                 val result = menuRepository.getMenu()
+
                 _meals.value = result
 
             } catch (e: Exception) {
@@ -46,6 +47,38 @@ class MainFragmentViewModel @Inject constructor(private val menuRepository: Menu
             }
         }
     }
+
+    fun searchMeals(query: String) {
+        viewModelScope.launch {
+            _meals.value = Resource.Loading
+            try {
+                val result = menuRepository.getMenu()
+
+                _meals.value = result
+
+                if (query.isBlank()) {
+                    return@launch
+                }
+                val mealsList = (result as? Resource.Success)?.data
+
+                val filteredMeals = mealsList?.filter {
+
+                    it.name.contains(query, ignoreCase = true)
+
+                }
+
+                if (filteredMeals.isNullOrEmpty()) {
+                    _meals.value = Resource.Empty
+                } else {
+                    _meals.value = Resource.Success(filteredMeals)
+                }
+
+            } catch (e: Exception) {
+                _meals.value = Resource.Failure(e.message)
+            }
+        }
+    }
+
 
     fun addMealToCart(meal: Meal, username: String, quantity: Int) {
         viewModelScope.launch {
@@ -61,14 +94,22 @@ class MainFragmentViewModel @Inject constructor(private val menuRepository: Menu
 
 
 
+
+
     fun getUserCart(username: String) {
         viewModelScope.launch {
             _cart.value = Resource.Loading
             try {
                 val result = menuRepository.getUserCart(username)
-                _cart.value = result
+                val cartItems = (result as? Resource.Success)?.data
+                if(cartItems != null){
+                    _cart.value = result
+                }else{
+                    _cart.value = Resource.Empty
+                }
+
             } catch (e: Exception) {
-                _cart.value = Resource.Failure(e.message)
+                _cart.value = Resource.Failure(e.localizedMessage)
             }
         }
     }

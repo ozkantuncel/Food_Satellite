@@ -9,7 +9,7 @@ import com.example.foodsatellite.R
 import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator
 
 abstract class SwipeToDeleteCallback(context: Context):ItemTouchHelper.SimpleCallback(0,ItemTouchHelper.LEFT) {
-    val background = ContextCompat.getColor(context,R.color.heartColorOn)
+    private val background = ContextCompat.getColor(context,R.color.heartColorOn)
 
     override fun onMove(
         recyclerView: RecyclerView,

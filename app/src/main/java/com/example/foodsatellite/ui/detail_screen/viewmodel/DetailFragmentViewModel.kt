@@ -1,4 +1,4 @@
-package com.example.foodsatellite.ui.cart_screen.viewmodel
+package com.example.foodsatellite.ui.main_screen.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -14,8 +14,9 @@ import kotlinx.coroutines.launch
 import java.lang.Exception
 import javax.inject.Inject
 
+
 @HiltViewModel
-class CartFragmentViewModel @Inject constructor(private val menuRepository: MenuRepository) :
+class DetailFragmentViewModel @Inject constructor(private val menuRepository: MenuRepository) :
     ViewModel() {
 
     private val _cart = MutableLiveData<Resource<List<CartMeal>>>()
@@ -26,8 +27,6 @@ class CartFragmentViewModel @Inject constructor(private val menuRepository: Menu
 
     private val _deleteCartMeal = MutableLiveData<Resource<CartResponse>>()
     val deleteCartMeal: LiveData<Resource<CartResponse>> = _deleteCartMeal
-
-
 
     fun addMealToCart(meal: Meal, username: String, quantity: Int) {
         viewModelScope.launch {
@@ -61,11 +60,6 @@ class CartFragmentViewModel @Inject constructor(private val menuRepository: Menu
         }
     }
 
-    /*fun getMealQuantityInCart(username: String,mealName: String): Int {
-        getUserCart(username)
-        val cartItems = (_cart.value as? Resource.Success)?.data
-        return cartItems?.find { it.name == mealName }?.quantity ?: 0
-    }*/
 
     fun deleteCartItem(cartMealId: Int, username: String) {
         viewModelScope.launch {
@@ -79,5 +73,6 @@ class CartFragmentViewModel @Inject constructor(private val menuRepository: Menu
             }
         }
     }
+
 
 }

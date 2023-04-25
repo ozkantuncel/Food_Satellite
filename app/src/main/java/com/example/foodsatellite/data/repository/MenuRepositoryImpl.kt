@@ -52,19 +52,15 @@ class MenuRepositoryImpl @Inject constructor(private val menuApi: MenuApi):MenuR
 
 
             val result = menuApi.getUserCart(username)
-            if(result.success == 1){
-                Resource.Success(data =result.meals)
-            }else{
-                Resource.Failure(error = "Hata")
-            }
+
+            Resource.Success(data =result.meals)
+
         }catch (e:Exception){
-            Resource.Failure(error = e.message)
+            Resource.Failure(error = e.localizedMessage)
         }
     }
 
-   /* private fun categorizeCart(cart: List<CartMeal>): Map<String, List<CartMeal>> {
-        return cart.groupBy { it.name }.toMap()
-    }*/
+
 
     override suspend fun deleteCartItem(cartItemId: Int, username: String): Resource<CartResponse> {
         return try {

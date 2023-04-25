@@ -4,9 +4,19 @@ import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
+import android.view.Menu
+
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
+import androidx.core.view.MenuProvider
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import com.example.foodsatellite.R
 import com.example.foodsatellite.databinding.FragmentMainBinding
 import com.example.foodsatellite.domain.util.Resource
 import com.example.foodsatellite.ui.badge_box.BadgeBox
@@ -15,7 +25,7 @@ import com.example.foodsatellite.ui.main_screen.viewmodel.MainFragmentViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MainFragment : Fragment() {
+class MainFragment : Fragment(),SearchView.OnQueryTextListener {
     private lateinit var badgeBoxInterface: BadgeBox
     private lateinit var binding: FragmentMainBinding
     private lateinit var viewModel: MainFragmentViewModel
@@ -24,6 +34,24 @@ class MainFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentMainBinding.inflate(inflater, container, false)
+
+        (activity as AppCompatActivity).setSupportActionBar(binding.toolbarMain)
+
+        requireActivity().addMenuProvider(object :MenuProvider{
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                menuInflater.inflate(R.menu.menu_main,menu)
+
+                val item = menu.findItem(R.id.action_search)
+                val searchView = item.actionView as SearchView
+                searchView.setOnQueryTextListener(this@MainFragment)
+            }
+
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                return false
+            }
+
+        },viewLifecycleOwner,Lifecycle.State.RESUMED)
+
         return binding.root
     }
 
@@ -37,6 +65,9 @@ class MainFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+
+
+
         viewModel.meals.observe(viewLifecycleOwner) { resources ->
             when (resources) {
                 is Resource.Loading -> {
@@ -46,6 +77,7 @@ class MainFragment : Fragment() {
                 is Resource.Success -> {
                     binding.progressCircular.visibility = View.GONE
                     resources.data?.let { meals ->
+
                         val adapter = MainFragmentAdapter(requireContext(), meals, viewModel)
                         binding.mainAdapter = adapter
 
@@ -89,10 +121,10 @@ class MainFragment : Fragment() {
                 }
 
                 is Resource.Failure -> {
-                    print(resources.error)
+                    println("${resources.error} hatta" )
                 }
 
-                is Resource.Empty -> {}
+                is Resource.Empty -> {println("Empty")}
             }
         }
     }
@@ -110,5 +142,25 @@ class MainFragment : Fragment() {
     fun sendNumberToActivity(number: Int) {
         badgeBoxInterface.onNumberReceived(number)
     }
+
+    override fun onQueryTextSubmit(query: String): Boolean {
+       search(query)
+        return true
+    }
+
+    override fun onQueryTextChange(newText: String): Boolean {
+        search(newText)
+        return true
+    }
+
+    fun search(query: String){
+        viewModel.searchMeals(query)
+    }
+
+
+
+
+
+
 
 }

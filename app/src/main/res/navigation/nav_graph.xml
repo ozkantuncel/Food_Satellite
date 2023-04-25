@@ -9,18 +9,43 @@
         android:id="@+id/homeFragment"
         android:name="com.example.foodsatellite.ui.main_screen.MainFragment"
         android:label="@string/main_bottom_m"
-        tools:layout="@layout/fragment_main" />
+        tools:layout="@layout/fragment_main" >
+        <action
+            android:id="@+id/homeFragmentTodetailFragmet"
+            app:destination="@id/detailFragmet" />
+    </fragment>
 
     <fragment
         android:id="@+id/cartFragment"
         android:name="com.example.foodsatellite.ui.cart_screen.CartFragment"
         android:label="@string/main_bottom_c"
-        tools:layout="@layout/fragment_cart" />
+        tools:layout="@layout/fragment_cart" >
+        <action
+            android:id="@+id/cartFragmentTodetailFragmet"
+            app:destination="@id/detailFragmet" />
+    </fragment>
 
     <fragment
         android:id="@+id/favFragment"
         android:name="com.example.foodsatellite.ui.fav_screen.FavoriteFragment"
         android:label="@string/main_bottom_f"
         tools:layout="@layout/fragment_favorite" />
+
+    <fragment
+        android:id="@+id/detailFragmet"
+        android:name="com.example.foodsatellite.ui.detail_screen.DetailFragment"
+        android:label="@string/detail_fragment"
+        tools:layout="@layout/fragment_detail">
+
+        <action
+            android:id="@+id/detailtoMain"
+            app:destination="@id/homeFragment" />
+        <action
+            android:id="@+id/detailtoCart"
+            app:destination="@id/cartFragment" />
+        <argument
+            android:name="cartMeal"
+            app:argType="com.example.foodsatellite.domain.model.CartMeal" />
+    </fragment>
 
 </navigation>

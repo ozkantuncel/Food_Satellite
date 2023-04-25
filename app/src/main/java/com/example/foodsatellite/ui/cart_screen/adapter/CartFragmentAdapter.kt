@@ -52,13 +52,9 @@ class CartFragmentAdapter(
 
     @SuppressLint("NotifyDataSetChanged")
     fun deleteItem(index:Int){
-        //listData.removeAt(index)
         viewModel.deleteCartItem(cartMealId = meals[index].id,username = meals[index].username)
-        viewModel.getUserCart(username = "ozkantuncel2016@gmail.com")
-        /*println(meals[index].id)
-        println( meals[index].username)
-        println( meals[index].name)
-        println(index)*/
+        //viewModel.getUserCart(username = "ozkantuncel2016@gmail.com")
+        //meals.
         notifyDataSetChanged()
     }
 
