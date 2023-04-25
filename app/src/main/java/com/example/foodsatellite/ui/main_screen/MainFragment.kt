@@ -5,12 +5,10 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.Menu
-
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.MenuProvider
@@ -22,6 +20,7 @@ import com.example.foodsatellite.domain.util.Resource
 import com.example.foodsatellite.ui.badge_box.BadgeBox
 import com.example.foodsatellite.ui.main_screen.adapter.MainFragmentAdapter
 import com.example.foodsatellite.ui.main_screen.viewmodel.MainFragmentViewModel
+import com.google.android.material.chip.Chip
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -29,6 +28,8 @@ class MainFragment : Fragment(),SearchView.OnQueryTextListener {
     private lateinit var badgeBoxInterface: BadgeBox
     private lateinit var binding: FragmentMainBinding
     private lateinit var viewModel: MainFragmentViewModel
+    private val categories = listOf("İsim Artan","İsim Azalan","Fiyat Artan","Fiyat Azalan")
+    private var selectedCategoryIndex = 0
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -59,6 +60,8 @@ class MainFragment : Fragment(),SearchView.OnQueryTextListener {
         super.onCreate(savedInstanceState)
         val tempViewModel: MainFragmentViewModel by viewModels()
         viewModel = tempViewModel
+
+
     }
 
 
@@ -67,7 +70,7 @@ class MainFragment : Fragment(),SearchView.OnQueryTextListener {
 
 
 
-
+        cratedChip()
         viewModel.meals.observe(viewLifecycleOwner) { resources ->
             when (resources) {
                 is Resource.Loading -> {
@@ -80,24 +83,19 @@ class MainFragment : Fragment(),SearchView.OnQueryTextListener {
 
                         val adapter = MainFragmentAdapter(requireContext(), meals, viewModel)
                         binding.mainAdapter = adapter
-
                     }
 
                 }
 
                 is Resource.Failure -> {
-
+                    println(resources.error)
                 }
 
-                is Resource.Empty -> {}
+                is Resource.Empty -> {
+                    println("Empty")
+                }
             }
         }
-
-        /*val sampleMeal = Meal(id = 2, name = "Baklava", imageName = "baklava.png", price = 25)
-        viewModel.addMealToCart(meal = sampleMeal, username = "ozkantuncel2016@gmail.com", quantity =1 )*/
-
-
-        //viewModel.deleteCartItem(cartMealId = 94504, username = "ozkantuncel2016@gmail.com")
 
         viewModel.getUserCart(username = "ozkantuncel2016@gmail.com")
         viewModel.cart.observe(viewLifecycleOwner) { resources ->
@@ -108,15 +106,8 @@ class MainFragment : Fragment(),SearchView.OnQueryTextListener {
 
                 is Resource.Success -> {
                     resources.data?.let { meals ->
-
-                       /*for (meal in meals){
-                           println(meal.name)
-                           println(meal.imageName)
-                           println(meal.price)
-                           println(meal.quantity)
-                           println(meal.username)
-                           println(meal.id)
-                       }*/
+                        println(meals.size)
+                        sendNumberToActivity(meals.size)
                     }
                 }
 
@@ -124,7 +115,7 @@ class MainFragment : Fragment(),SearchView.OnQueryTextListener {
                     println("${resources.error} hatta" )
                 }
 
-                is Resource.Empty -> {println("Empty")}
+                is Resource.Empty -> {sendNumberToActivity(0)}
             }
         }
     }
@@ -137,6 +128,38 @@ class MainFragment : Fragment(),SearchView.OnQueryTextListener {
         } else {
             throw RuntimeException("$context must implement MyInterface")
         }
+    }
+
+    fun cratedChip(){
+        for(i in categories.indices){
+            val chip = layoutInflater.inflate(R.layout.chip_item, null, false) as Chip
+            chip.text = categories[i]
+            chip.isClickable = true
+            chip.isChecked = i == selectedCategoryIndex
+            chip.setOnClickListener{
+                selectChip(i)
+            }
+            binding.chipGroup.addView(chip)
+            if(selectedCategoryIndex == 0){
+                selectChip(0)
+            }
+        }
+    }
+
+    private fun selectChip(index: Int) {
+
+        val previousChip = binding.chipGroup.getChildAt(selectedCategoryIndex) as Chip
+        previousChip.isChecked = false
+        previousChip.setChipBackgroundColorResource(R.color.chipGray)
+
+        val selectedChip = binding.chipGroup.getChildAt(index) as Chip
+        selectedChip.isChecked = true
+        selectedChip.setChipBackgroundColorResource(R.color.chipTextPress)
+
+        viewModel.arrBy(selectedChip.text.toString())
+
+        selectedCategoryIndex = index
+
     }
 
     fun sendNumberToActivity(number: Int) {

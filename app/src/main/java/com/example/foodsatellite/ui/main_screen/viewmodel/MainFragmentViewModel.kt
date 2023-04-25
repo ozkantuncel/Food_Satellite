@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.foodsatellite.domain.model.CartMeal
-import com.example.foodsatellite.domain.model.CartResponse
 import com.example.foodsatellite.domain.model.Meal
 import com.example.foodsatellite.domain.repository.MenuRepository
 import com.example.foodsatellite.domain.util.Resource
@@ -24,11 +23,6 @@ class MainFragmentViewModel @Inject constructor(private val menuRepository: Menu
     private val _cart = MutableLiveData<Resource<List<CartMeal>>>()
     val cart: LiveData<Resource<List<CartMeal>>> = _cart
 
-    private val _addMealToCart = MutableLiveData<Resource<CartResponse>>()
-    val addMealToCart: LiveData<Resource<CartResponse>> = _addMealToCart
-
-    private val _deleteCartMeal = MutableLiveData<Resource<CartResponse>>()
-    val deleteCartMeal: LiveData<Resource<CartResponse>> = _deleteCartMeal
 
     init {
         fetchMenu()
@@ -80,20 +74,33 @@ class MainFragmentViewModel @Inject constructor(private val menuRepository: Menu
     }
 
 
-    fun addMealToCart(meal: Meal, username: String, quantity: Int) {
+    fun arrBy(string:String){
+        val categories = listOf("İsim Artan","İsim Azalan","Fiyat Artan","Fiyat Azalan")
         viewModelScope.launch {
-            _addMealToCart.value = Resource.Loading
+            _meals.value = Resource.Loading
             try {
-                val result = menuRepository.addMealToCart(meal, username, quantity)
-                _addMealToCart.value = result
+                val result = menuRepository.getMenu()
+                val mealsList = (result as? Resource.Success)?.data
+
+                val mealListBy = when (string) {
+                    categories[0] -> mealsList?.sortedBy { it.name }
+                    categories[1] -> mealsList?.sortedByDescending { it.name }
+                    categories[2] -> mealsList?.sortedBy { it.price }
+                    categories[3] -> mealsList?.sortedByDescending { it.price }
+                    else -> null
+                }
+
+                if (mealListBy != null) {
+                    _meals.value = Resource.Success(mealListBy)
+                } else {
+                    _meals.value = Resource.Failure("Invalid category")
+                }
             } catch (e: Exception) {
-                _addMealToCart.value = Resource.Failure(e.message)
+                _meals.value = Resource.Failure(e.message)
             }
         }
+
     }
-
-
-
 
 
     fun getUserCart(username: String) {
@@ -114,24 +121,8 @@ class MainFragmentViewModel @Inject constructor(private val menuRepository: Menu
         }
     }
 
-    fun getMealQuantityInCart(username: String,mealName: String): Int {
-        getUserCart(username)
-        val cartItems = (_cart.value as? Resource.Success)?.data
-        return cartItems?.find { it.name == mealName }?.quantity ?: 0
-    }
 
-    fun deleteCartItem(cartMealId: Int, username: String) {
-        viewModelScope.launch {
-            _deleteCartMeal.value = Resource.Loading
-            try {
-                val result =
-                    menuRepository.deleteCartItem(cartItemId = cartMealId, username = username)
-                _deleteCartMeal.value = result
-            } catch (e: Exception) {
-                _deleteCartMeal.value = Resource.Failure(e.message)
-            }
-        }
-    }
+
 
 
 }

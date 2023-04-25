@@ -33,8 +33,13 @@ class MainActivity : AppCompatActivity(),BadgeBox {
 
     override fun onNumberReceived(number: Int) {
         val badgeDrawable = binding.bottomNav.getOrCreateBadge(R.id.cartFragment)
-        badgeDrawable.isVisible = true
-        badgeDrawable.number = number
+        if (number > 0) {
+            badgeDrawable.isVisible = true
+            badgeDrawable.backgroundColor = getColor(R.color.chipTextPress)
+            badgeDrawable.number = number
+        } else {
+            badgeDrawable.isVisible = false
+        }
     }
 
 

@@ -50,7 +50,8 @@ class CartFragmentViewModel @Inject constructor(private val menuRepository: Menu
                 val result = menuRepository.getUserCart(username)
                 val cartItems = (result as? Resource.Success)?.data
                 if(cartItems != null){
-                    _cart.value = result
+                    val items = cartItems.sortedBy { it.name }
+                    _cart.value = Resource.Success(items)
                 }else{
                     _cart.value = Resource.Empty
                 }
@@ -61,11 +62,33 @@ class CartFragmentViewModel @Inject constructor(private val menuRepository: Menu
         }
     }
 
-    /*fun getMealQuantityInCart(username: String,mealName: String): Int {
-        getUserCart(username)
-        val cartItems = (_cart.value as? Resource.Success)?.data
-        return cartItems?.find { it.name == mealName }?.quantity ?: 0
-    }*/
+    fun arrBy(sort:String,username: String){
+        val categories = listOf("İsim Artan","İsim Azalan","Fiyat Artan","Fiyat Azalan")
+        viewModelScope.launch {
+            _cart.value = Resource.Loading
+            try {
+                val result = menuRepository.getUserCart(username)
+                val cartMealList = (result as? Resource.Success)?.data
+
+                val mealListBy = when (sort) {
+                    categories[0] -> cartMealList?.sortedBy { it.name }
+                    categories[1] -> cartMealList?.sortedByDescending { it.name }
+                    categories[2] -> cartMealList?.sortedBy { (it.price*it.quantity)}
+                    categories[3] -> cartMealList?.sortedByDescending { (it.price*it.quantity) }
+                    else -> null
+                }
+
+                if (mealListBy != null) {
+                    _cart.value = Resource.Success(mealListBy)
+                } else {
+                    _cart.value = Resource.Failure("Invalid category")
+                }
+            } catch (e: Exception) {
+                _cart.value = Resource.Failure(e.message)
+            }
+        }
+
+    }
 
     fun deleteCartItem(cartMealId: Int, username: String) {
         viewModelScope.launch {
@@ -74,6 +97,7 @@ class CartFragmentViewModel @Inject constructor(private val menuRepository: Menu
                 val result =
                     menuRepository.deleteCartItem(cartItemId = cartMealId, username = username)
                 _deleteCartMeal.value = result
+                getUserCart(username)
             } catch (e: Exception) {
                 _deleteCartMeal.value = Resource.Failure(e.message)
             }

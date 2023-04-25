@@ -16,20 +16,19 @@ import com.example.foodsatellite.domain.model.CartMeal
 import com.example.foodsatellite.domain.model.Meal
 import com.example.foodsatellite.domain.util.Resource
 import com.example.foodsatellite.ui.main_screen.viewmodel.DetailFragmentViewModel
-import com.example.foodsatellite.ui.main_screen.viewmodel.MainFragmentViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class DetailFragment : Fragment() {
-    private lateinit var binding: FragmentDetailBinding
+    private  var _binding: FragmentDetailBinding? = null
+    private val binding get() = _binding!!
     private lateinit var viewModel: DetailFragmentViewModel
-    private lateinit var cartList: List<CartMeal>
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentDetailBinding.inflate(inflater, container, false)
+        _binding = FragmentDetailBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -43,17 +42,14 @@ class DetailFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
 
+
         val bundle: DetailFragmentArgs by navArgs()
         val data = bundle.cartMeal
         binding.cartMealData = data
 
 
         binding.toolbarDetay.setNavigationOnClickListener {
-            if (data.id == 0) {
-                Navigation.findNavController(it).navigate(R.id.homeFragment)
-            } else {
-                Navigation.findNavController(it).navigate(R.id.cartFragment)
-            }
+            nav(data.id,it)
 
         }
 
@@ -90,7 +86,6 @@ class DetailFragment : Fragment() {
                         println("Success")
                         resources.data?.let { meals ->
 
-                            println(searchInCartMeals(meals, data.name))
                             if (searchInCartMeals(meals, data.name)) {
 
                                 val id = meals.filter { cartMeal ->
@@ -114,6 +109,7 @@ class DetailFragment : Fragment() {
                                 quantity = count
                             )
                         }
+                        nav(data.id,it)
                     }
 
                     is Resource.Failure -> {
@@ -133,6 +129,7 @@ class DetailFragment : Fragment() {
                             username = data.username,
                             quantity = count
                         )
+                        nav(data.id,it)
                     }
                 }
             }
@@ -145,6 +142,16 @@ class DetailFragment : Fragment() {
             .placeholder(R.drawable.progress_circular)
             .into(imageView)
     }
+
+    fun nav(id:Int,view: View){
+        if (id == 0) {
+            Navigation.findNavController(view).navigate(R.id.homeFragment)
+        } else {
+            Navigation.findNavController(view).navigate(R.id.cartFragment)
+        }
+    }
+
+
 
     fun updateCountAndButtonStatus(count: Int, price: Int) {
         binding.textViewCount.text = count.toString()
