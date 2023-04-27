@@ -1,4 +1,4 @@
-package com.example.foodsatellite.ui.cart_screen.adapter
+package com.example.foodsatellite.ui.util
 
 import android.content.Context
 import android.graphics.Canvas

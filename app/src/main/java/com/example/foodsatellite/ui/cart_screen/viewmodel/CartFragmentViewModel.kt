@@ -87,7 +87,6 @@ class CartFragmentViewModel @Inject constructor(private val menuRepository: Menu
                 _cart.value = Resource.Failure(e.message)
             }
         }
-
     }
 
     fun deleteCartItem(cartMealId: Int, username: String) {

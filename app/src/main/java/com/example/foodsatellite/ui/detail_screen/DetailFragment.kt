@@ -47,10 +47,13 @@ class DetailFragment : Fragment() {
         val data = bundle.cartMeal
         binding.cartMealData = data
 
+        if (data.id != 0){
+            binding.buttonAdd.text = getString(R.string.cart_update_button)
+        }
+
 
         binding.toolbarDetay.setNavigationOnClickListener {
             nav(data.id,it)
-
         }
 
         val url = "http://kasimadalan.pe.hu/yemekler/resimler/${data.imageName}"
@@ -79,7 +82,7 @@ class DetailFragment : Fragment() {
             viewModel.cart.observe(viewLifecycleOwner) { resources ->
                 when (resources) {
                     is Resource.Loading -> {
-                        println("Loanding")
+                        //TODO
                     }
 
                     is Resource.Success -> {
@@ -113,7 +116,7 @@ class DetailFragment : Fragment() {
                     }
 
                     is Resource.Failure -> {
-                        println("${resources.error} hata")
+                        //TODO
                     }
 
                     is Resource.Empty -> {
@@ -136,14 +139,14 @@ class DetailFragment : Fragment() {
         }
     }
 
-    fun loadImage(imageUrl: String, imageView: ImageView) {
+    private fun loadImage(imageUrl: String, imageView: ImageView) {
         Glide.with(requireContext())
             .load(imageUrl)
             .placeholder(R.drawable.progress_circular)
             .into(imageView)
     }
 
-    fun nav(id:Int,view: View){
+    private fun nav(id:Int, view: View){
         if (id == 0) {
             Navigation.findNavController(view).navigate(R.id.homeFragment)
         } else {
@@ -153,14 +156,14 @@ class DetailFragment : Fragment() {
 
 
 
-    fun updateCountAndButtonStatus(count: Int, price: Int) {
+    private fun updateCountAndButtonStatus(count: Int, price: Int) {
         binding.textViewCount.text = count.toString()
         val totalPrice = count * price
         binding.textViewPrice.text = getString(R.string.price, totalPrice)
         binding.imageButtonSub.isEnabled = count > 1
     }
 
-    fun searchInCartMeals(cartList: List<CartMeal>, searchName: String): Boolean {
+    private fun searchInCartMeals(cartList: List<CartMeal>, searchName: String): Boolean {
         if (searchName.isBlank()) {
             return false
         }

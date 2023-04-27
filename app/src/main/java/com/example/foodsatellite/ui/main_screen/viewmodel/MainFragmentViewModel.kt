@@ -5,7 +5,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.foodsatellite.domain.model.CartMeal
+import com.example.foodsatellite.domain.model.FavoriteMeal
 import com.example.foodsatellite.domain.model.Meal
+import com.example.foodsatellite.domain.repository.MenuDaoRepository
 import com.example.foodsatellite.domain.repository.MenuRepository
 import com.example.foodsatellite.domain.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -15,7 +17,10 @@ import javax.inject.Inject
 
 
 @HiltViewModel
-class MainFragmentViewModel @Inject constructor(private val menuRepository: MenuRepository) :
+class MainFragmentViewModel @Inject constructor(
+    private val menuRepository: MenuRepository,
+    private val menuDaoRepository: MenuDaoRepository
+    ) :
     ViewModel() {
     private val _meals = MutableLiveData<Resource<List<Meal>>>()
     val meals: LiveData<Resource<List<Meal>>> = _meals
@@ -23,10 +28,48 @@ class MainFragmentViewModel @Inject constructor(private val menuRepository: Menu
     private val _cart = MutableLiveData<Resource<List<CartMeal>>>()
     val cart: LiveData<Resource<List<CartMeal>>> = _cart
 
+    private val _myFav = MutableLiveData<Resource<Int>>()
+    val myFav: LiveData<Resource<Int>> = _myFav
 
     init {
         fetchMenu()
+        favCount()
     }
+
+
+
+    fun insertFav(favoriteMeal: FavoriteMeal){
+        viewModelScope.launch {
+            try {
+                menuDaoRepository.insertFavData(favoriteMeal)
+                favCount()
+            }catch (e:Exception){
+                _myFav.value = Resource.Failure(e.message)
+            }
+        }
+    }
+
+
+     fun favCount(){
+         viewModelScope.launch{
+             _myFav.value = Resource.Loading
+             try {
+                val result = menuDaoRepository.getFavMealsCount()
+                 val favItems = (result as? Resource.Success)?.data
+
+                 if(favItems != 0){
+                     _myFav.value = result
+                 }else{
+                     _myFav.value = Resource.Empty
+                 }
+             }catch (e:Exception){
+                 _myFav.value = Resource.Failure(e.message)
+             }
+         }
+    }
+
+
+
 
     private fun fetchMenu() {
         viewModelScope.launch {

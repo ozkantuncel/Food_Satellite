@@ -14,7 +14,7 @@ import com.example.foodsatellite.databinding.FragmentCartBinding
 import com.example.foodsatellite.domain.util.Resource
 import com.example.foodsatellite.ui.badge_box.BadgeBox
 import com.example.foodsatellite.ui.cart_screen.adapter.CartFragmentAdapter
-import com.example.foodsatellite.ui.cart_screen.adapter.SwipeToDeleteCallback
+import com.example.foodsatellite.ui.util.SwipeToDeleteCallback
 import com.example.foodsatellite.ui.cart_screen.viewmodel.CartFragmentViewModel
 import com.google.android.material.chip.Chip
 import dagger.hilt.android.AndroidEntryPoint
@@ -147,7 +147,7 @@ class CartFragment : Fragment() {
 
 
     fun sendNumberToActivity(number: Int) {
-        badgeBoxInterface.onNumberReceived(number)
+        badgeBoxInterface.onNumberCart(number)
 
     }
 

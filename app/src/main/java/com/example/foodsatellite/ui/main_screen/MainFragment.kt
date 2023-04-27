@@ -60,8 +60,6 @@ class MainFragment : Fragment(),SearchView.OnQueryTextListener {
         super.onCreate(savedInstanceState)
         val tempViewModel: MainFragmentViewModel by viewModels()
         viewModel = tempViewModel
-
-
     }
 
 
@@ -92,32 +90,50 @@ class MainFragment : Fragment(),SearchView.OnQueryTextListener {
                 }
 
                 is Resource.Empty -> {
-                    println("Empty")
+                    binding.progressCircular.visibility = View.GONE
+                    binding.recyclerViewHor.adapter = null
                 }
             }
+        }
+
+        viewModel.favCount()
+        viewModel.myFav.observe(viewLifecycleOwner){resources->
+            when (resources) {
+                is Resource.Loading -> {
+
+                }
+
+                is Resource.Success -> {
+                    resources.data?.let { meals ->
+                        sendNumberToActivityFav(meals)
+                    }
+                }
+
+                is Resource.Failure -> {}
+
+                is Resource.Empty -> { sendNumberToActivityFav(0)}
+            }
+
         }
 
         viewModel.getUserCart(username = "ozkantuncel2016@gmail.com")
         viewModel.cart.observe(viewLifecycleOwner) { resources ->
             when (resources) {
-                is Resource.Loading -> {
-                    println("Loanding")
-                }
+                is Resource.Loading -> {}
 
                 is Resource.Success -> {
                     resources.data?.let { meals ->
-                        println(meals.size)
                         sendNumberToActivity(meals.size)
                     }
                 }
 
-                is Resource.Failure -> {
-                    println("${resources.error} hatta" )
-                }
+                is Resource.Failure -> {}
 
                 is Resource.Empty -> {sendNumberToActivity(0)}
             }
         }
+
+
     }
 
     override fun onAttach(context: Context) {
@@ -163,7 +179,12 @@ class MainFragment : Fragment(),SearchView.OnQueryTextListener {
     }
 
     fun sendNumberToActivity(number: Int) {
-        badgeBoxInterface.onNumberReceived(number)
+        badgeBoxInterface.onNumberCart(number)
+    }
+
+    fun sendNumberToActivityFav(number: Int) {
+        badgeBoxInterface.onNumberFavorite(number)
+
     }
 
     override fun onQueryTextSubmit(query: String): Boolean {
@@ -179,11 +200,6 @@ class MainFragment : Fragment(),SearchView.OnQueryTextListener {
     fun search(query: String){
         viewModel.searchMeals(query)
     }
-
-
-
-
-
 
 
 }

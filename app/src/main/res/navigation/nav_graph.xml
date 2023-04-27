@@ -29,7 +29,11 @@
         android:id="@+id/favFragment"
         android:name="com.example.foodsatellite.ui.fav_screen.FavoriteFragment"
         android:label="@string/main_bottom_f"
-        tools:layout="@layout/fragment_favorite" />
+        tools:layout="@layout/fragment_favorite" >
+        <action
+            android:id="@+id/favFragmentToDetailFragmet"
+            app:destination="@id/detailFragmet" />
+    </fragment>
 
     <fragment
         android:id="@+id/detailFragmet"
@@ -46,6 +50,9 @@
         <argument
             android:name="cartMeal"
             app:argType="com.example.foodsatellite.domain.model.CartMeal" />
+        <action
+            android:id="@+id/action_detailFragmet_to_favFragment"
+            app:destination="@id/favFragment" />
     </fragment>
 
 </navigation>

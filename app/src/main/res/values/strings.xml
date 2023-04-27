@@ -11,7 +11,9 @@
     <string name="main_bottom_f">Favoriler</string>
     <string name="detail_fragment">Detail</string>
     <string name="main_fragment_text">Hızlı Sipariş</string>
+    <string name="favorite_fragment_text">Favorilerim</string>
     <string name="cart_add_button">Sepete Ekle</string>
+    <string name="cart_update_button">Sepeti Güncele</string>
     <string name="price">Ücret: %1$d TL</string>
     <string name="search">Ara</string>
 

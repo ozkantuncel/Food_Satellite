@@ -11,6 +11,7 @@ import com.bumptech.glide.Glide
 import com.example.foodsatellite.R
 import com.example.foodsatellite.databinding.RowItemsBinding
 import com.example.foodsatellite.domain.model.CartMeal
+import com.example.foodsatellite.domain.model.FavoriteMeal
 import com.example.foodsatellite.domain.model.Meal
 import com.example.foodsatellite.ui.main_screen.MainFragmentDirections
 import com.example.foodsatellite.ui.main_screen.viewmodel.MainFragmentViewModel
@@ -20,8 +21,9 @@ class MainFragmentAdapter(
     private val meals:List<Meal>,
     private val viewModel: MainFragmentViewModel
 ):RecyclerView.Adapter<MainFragmentAdapter.ViewHolder>() {
-    inner class ViewHolder(private var binding: RowItemsBinding):RecyclerView.ViewHolder(binding.root){
+    var onItemClickListener: ((ImageView, Int) -> Unit)? = null
 
+    inner class ViewHolder(private var binding: RowItemsBinding):RecyclerView.ViewHolder(binding.root){
         fun bind(item:Meal){
             binding.mealData = item
             val url = "http://kasimadalan.pe.hu/yemekler/resimler/${item.imageName}"
@@ -37,8 +39,16 @@ class MainFragmentAdapter(
                     quantity = 1,
                     username = "ozkantuncel2016@gmail.com"
                 )
+
                 val detail = MainFragmentDirections.homeFragmentTodetailFragmet(oCart)
                 Navigation.findNavController(it).navigate(detail)
+
+            }
+
+
+            binding.imageHeart.setOnClickListener {
+                val fav = FavoriteMeal(null,item.id,item.name,item.imageName,item.price)
+                viewModel.insertFav(fav)
             }
         }
     }
@@ -60,6 +70,7 @@ class MainFragmentAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val meal = meals[position]
         holder.bind(meal)
+
     }
 
     fun loadImage(imageUrl:String,imageView: ImageView){

@@ -31,8 +31,19 @@ class MainActivity : AppCompatActivity(),BadgeBox {
 
     }
 
-    override fun onNumberReceived(number: Int) {
+    override fun onNumberCart(number: Int) {
         val badgeDrawable = binding.bottomNav.getOrCreateBadge(R.id.cartFragment)
+        if (number > 0) {
+            badgeDrawable.isVisible = true
+            badgeDrawable.backgroundColor = getColor(R.color.chipTextPress)
+            badgeDrawable.number = number
+        } else {
+            badgeDrawable.isVisible = false
+        }
+    }
+
+    override fun onNumberFavorite(number: Int) {
+        val badgeDrawable = binding.bottomNav.getOrCreateBadge(R.id.favFragment)
         if (number > 0) {
             badgeDrawable.isVisible = true
             badgeDrawable.backgroundColor = getColor(R.color.chipTextPress)
