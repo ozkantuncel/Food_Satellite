@@ -26,12 +26,12 @@ class SplashActivity : AppCompatActivity() {
         Handler(Looper.getMainLooper()).postDelayed({
             if (isShowedOnBoarding){
                 startActivity(Intent(this,MainActivity::class.java))
+                finish()
             }else{
                 startActivity(Intent(this,OnboardingActivity::class.java))
+                finish()
             }
 
         },3000)
-
-
     }
 }
