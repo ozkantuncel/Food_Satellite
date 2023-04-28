@@ -86,5 +86,9 @@ dependencies {
     implementation "androidx.room:room-ktx:2.5.1"
     kapt "androidx.room:room-compiler:2.5.1"
 
+    // Hawk
+    implementation("com.orhanobut:hawk:2.0.1")
+
+
 
 }

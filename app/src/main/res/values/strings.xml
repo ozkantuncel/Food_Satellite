@@ -16,6 +16,20 @@
     <string name="cart_update_button">Sepeti Güncele</string>
     <string name="price">Ücret: %1$d TL</string>
     <string name="search">Ara</string>
+    <string name="next_on">İleri</string>
+    <string name="back">Geri</string>
+    <string name="skip">Geç</string>
+
+    //Description
+    <string name="desc_one">Gezegendeki En Lezzetli Yemekleri Keşfedin</string>
+    <string name="desc_two">Sevdiğiniz tüm yemekleri burada bulabilirsiniz!</string>
+    <string name="desc_three">En sevdiğiniz yemekleri kaydedin ve her zaman kolayca erişin!</string>
+
+    //Title Onboarding
+    <string name="on_title_one">Hoşgeldiniz</string>
+    <string name="on_title_two">Gezegendeki En Lezzetli Yemekleri Keşfedin</string>
+    <string name="on_title_three">Favori Yemeklerim</string>
+
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
