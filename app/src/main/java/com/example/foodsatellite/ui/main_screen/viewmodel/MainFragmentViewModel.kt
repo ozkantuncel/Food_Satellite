@@ -91,9 +91,8 @@ class MainFragmentViewModel @Inject constructor(
             try {
                 val result = menuRepository.getMenu()
 
-                _meals.value = result
-
                 if (query.isBlank()) {
+                    _meals.value = result
                     return@launch
                 }
                 val mealsList = (result as? Resource.Success)?.data
