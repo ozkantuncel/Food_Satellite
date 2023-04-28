@@ -101,7 +101,7 @@
                 android:src="@drawable/fav_ico"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:tint="@color/heartColorOff" />
+                app:tint="@color/black" />
 
             <ImageView
                 android:id="@+id/image_cart"
@@ -112,7 +112,7 @@
                 android:src="@drawable/cart_pic"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                android:background="@color/chipTextPress" />
+                app:tint="@color/chipTextPress" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
