@@ -49,10 +49,10 @@ class CartFragmentViewModel @Inject constructor(private val menuRepository: Menu
             try {
                 val result = menuRepository.getUserCart(username)
                 val cartItems = (result as? Resource.Success)?.data
-                if(cartItems != null){
+                if (!cartItems.isNullOrEmpty()) {
                     val items = cartItems.sortedBy { it.name }
                     _cart.value = Resource.Success(items)
-                }else{
+                } else {
                     _cart.value = Resource.Empty
                 }
 
@@ -89,7 +89,7 @@ class CartFragmentViewModel @Inject constructor(private val menuRepository: Menu
         }
     }
 
-    fun deleteCartItem(cartMealId: Int, username: String) {
+    fun deleteCartItem(cartMealId: String, username: String) {
         viewModelScope.launch {
             _deleteCartMeal.value = Resource.Loading
             try {

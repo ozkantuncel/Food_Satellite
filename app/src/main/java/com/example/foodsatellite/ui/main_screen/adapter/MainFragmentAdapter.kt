@@ -32,7 +32,7 @@ class MainFragmentAdapter(
             binding.imageCart.setOnClickListener{
 
                 val oCart = CartMeal(
-                    id = 0,
+                    id = "0",
                     name = item.name,
                     imageName = item.imageName,
                     price = item.price,

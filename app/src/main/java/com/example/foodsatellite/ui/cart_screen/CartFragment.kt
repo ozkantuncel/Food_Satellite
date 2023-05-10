@@ -31,15 +31,13 @@ class CartFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentCartBinding.inflate(inflater, container, false)
+        viewModel.getUserCart(username = "ozkantuncel2016@gmail.com")
         return binding.root
     }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val tempViewModel:CartFragmentViewModel by viewModels()
         viewModel = tempViewModel
-        viewModel.getUserCart(username = "ozkantuncel2016@gmail.com")
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -61,12 +59,6 @@ class CartFragment : Fragment() {
                         sendNumberToActivity(meals.size)
                         val adapter = CartFragmentAdapter(requireContext(), meals,viewModel)
 
-
-                        for (meal in meals){
-                            println(meal.username)
-                            println(meals.size)
-                        }
-
                         binding.recyclerViewHor.apply {
                             binding.cartAdapter = adapter
                             val swipeDel = object : SwipeToDeleteCallback(requireContext()){
@@ -87,7 +79,8 @@ class CartFragment : Fragment() {
 
                 is Resource.Failure -> {
                     binding.progressCircular.visibility = View.GONE
-                    print(resources.error)
+                    binding.recyclerViewHor.adapter = null
+                    println(resources.error)
                 }
 
                 is Resource.Empty -> {

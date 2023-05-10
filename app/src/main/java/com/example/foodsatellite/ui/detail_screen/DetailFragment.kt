@@ -47,7 +47,7 @@ class DetailFragment : Fragment() {
         val data = bundle.cartMeal
         binding.cartMealData = data
 
-        if (data.id != 0){
+        if (data.id != "0"){
             binding.buttonAdd.text = getString(R.string.cart_update_button)
         }
 
@@ -146,8 +146,8 @@ class DetailFragment : Fragment() {
             .into(imageView)
     }
 
-    private fun nav(id:Int, view: View){
-        if (id == 0) {
+    private fun nav(id:String, view: View){
+        if (id == "0") {
             Navigation.findNavController(view).navigate(R.id.homeFragment)
         } else {
             Navigation.findNavController(view).navigate(R.id.cartFragment)

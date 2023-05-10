@@ -12,5 +12,5 @@ interface MenuRepository {
 
     suspend fun getUserCart(username:String):Resource<List<CartMeal>>
 
-    suspend fun deleteCartItem(cartItemId:Int,username: String):Resource<CartResponse>
+    suspend fun deleteCartItem(cartItemId:String,username: String):Resource<CartResponse>
 }

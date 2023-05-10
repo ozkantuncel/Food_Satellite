@@ -35,7 +35,7 @@ class FavoriteFragmentAdapter(
             binding.favoriteCard.setOnClickListener {
 
                 val oCart = CartMeal(
-                    id = 0,
+                    id = "0",
                     name = item.meal_name,
                     imageName = item.meal_imageName,
                     price = item.meal_price,

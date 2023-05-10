@@ -61,7 +61,7 @@ class DetailFragmentViewModel @Inject constructor(private val menuRepository: Me
     }
 
 
-    fun deleteCartItem(cartMealId: Int, username: String) {
+    fun deleteCartItem(cartMealId: String, username: String) {
         viewModelScope.launch {
             _deleteCartMeal.value = Resource.Loading
             try {

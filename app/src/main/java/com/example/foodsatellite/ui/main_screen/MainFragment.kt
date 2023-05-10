@@ -78,7 +78,6 @@ class MainFragment : Fragment(),SearchView.OnQueryTextListener {
                 is Resource.Success -> {
                     binding.progressCircular.visibility = View.GONE
                     resources.data?.let { meals ->
-
                         val adapter = MainFragmentAdapter(requireContext(), meals, viewModel)
                         binding.mainAdapter = adapter
                     }
@@ -86,7 +85,8 @@ class MainFragment : Fragment(),SearchView.OnQueryTextListener {
                 }
 
                 is Resource.Failure -> {
-                    println(resources.error)
+                    binding.progressCircular.visibility = View.GONE
+                    println("hata : ${resources.error}")
                 }
 
                 is Resource.Empty -> {
@@ -127,7 +127,9 @@ class MainFragment : Fragment(),SearchView.OnQueryTextListener {
                     }
                 }
 
-                is Resource.Failure -> {}
+                is Resource.Failure -> {
+                    println("hata ${resources.error}")
+                }
 
                 is Resource.Empty -> {sendNumberToActivity(0)}
             }

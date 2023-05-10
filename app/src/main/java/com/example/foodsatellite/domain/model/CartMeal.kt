@@ -6,7 +6,7 @@ import java.io.Serializable
 
 data class CartMeal(
     @SerializedName("sepet_yemek_id")
-    val id: Int,
+    val id: String,
     @SerializedName("yemek_adi")
     val name: String,
     @SerializedName("yemek_resim_adi")

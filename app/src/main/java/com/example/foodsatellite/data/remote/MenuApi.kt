@@ -1,39 +1,35 @@
 package com.example.foodsatellite.data.remote
 
+import com.example.foodsatellite.domain.model.CartAdd
+import com.example.foodsatellite.domain.model.CartMeal
 import com.example.foodsatellite.domain.model.CartMealResponse
 import com.example.foodsatellite.domain.model.CartResponse
 import com.example.foodsatellite.domain.model.MenuResponse
-import retrofit2.http.Field
-import retrofit2.http.FormUrlEncoded
+import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.Query
 
 interface MenuApi {
-    @GET("tumYemekleriGetir.php")
+    @GET("/meals/")
     suspend fun getMenu(): MenuResponse
 
 
-    @POST("sepeteYemekEkle.php")
-    @FormUrlEncoded
+    @POST("/carts/add/")
     suspend fun addToCart(
-        @Field("yemek_adi") mealName: String,
-        @Field("yemek_resim_adi") imageName: String,
-        @Field("yemek_fiyat") price: Int,
-        @Field("yemek_siparis_adet") quantity: Int,
-        @Field("kullanici_adi") username: String
+        @Body cart: CartAdd
     ): CartResponse
 
 
-    @POST("sepettekiYemekleriGetir.php")
-    @FormUrlEncoded
+    @GET("/carts")
     suspend fun getUserCart(
-        @Field("kullanici_adi") username: String
+        @Query("kullanici_adi") username: String
     ): CartMealResponse
 
-    @POST("sepettenYemekSil.php")
-    @FormUrlEncoded
+    @DELETE("/carts/delete")
     suspend fun deleteCartItem(
-        @Field("sepet_yemek_id") cartMealId:Int,
-        @Field("kullanici_adi") username:String
+        @Query ("sepet_yemek_id") cartMealId:String,
+        @Query ("kullanici_adi") username:String
     ):CartResponse
 }
